@@ -102,7 +102,7 @@ class Graf:
 		x = arange(h, self.a, h)
 		y = arange(h, self.b, h)
 		xgrid, ygrid = meshgrid(x, y)
-		zgrid = abs(sin(kpX*xgrid))*cos(omeg*time)
+		zgrid = abs(sin((pi/self.b)*ygrid)*cos(omeg*time)) ############################# sin
 		#TE Hxz
 		x1 = arange(h, self.a, h)
 		z1 = arange(h, self.lamb, h)
@@ -135,7 +135,7 @@ class Graf:
 		x = arange(h, self.a, h)
 		y = arange(h, self.b, h)
 		xgrid, ygrid = meshgrid(x, y)
-		zgrid = abs(sin(kpY*ygrid))*cos(omeg*time)
+		zgrid = abs(sin((pi/self.a)*xgrid)*cos(omeg*time)) ############################# sin
 		#TE Hxz
 		x1 = arange(h, self.a, h)
 		z1 = arange(h, self.lamb, h)
@@ -186,6 +186,17 @@ class Graf:
 			arrayValues1+=arrayAdd
 			arrayValues2=sorted(arrayValues1)
 			return arrayValues2
+
+		def arrS(arrayAdd=[]):
+			stepX=pi/10
+			XX=0
+			arrayValues=[]
+			while XX<=pi/2:
+				arrayValues.append(sin(XX))
+				XX+=stepX
+			arrayValues+=arrayAdd
+			return arrayValues
+
 		#метки для регистрации ошибок
 		N1=1
 		N2=1
@@ -200,7 +211,7 @@ class Graf:
 						N2=2 #четное ли б, если да то делим б на 2 для выбора сечения волновода в нужном месте
 					x, y, z, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5 = Graf.makeTE0m(self.a,self.b/(2*self.m),time,omeg,kp,kpX,kpY,hh,self)
 					subplot(2,4,1)
-					C1=contour(x, y, z, arr2(), linewidths=1.8)
+					C1=contour(x, y, z, arrS(), linewidths=1.8, colors='yellow')
 					xlabel("x")
 					ylabel("y")
 					title("Hxy")
@@ -235,7 +246,7 @@ class Graf:
 						N1=2 #четное ли n, если да то делим а на 2 для выбора сечения волновода в нужном месте
 					x, y, z, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5 = Graf.makeTEn0(self.a/(2*self.n),self.b,time,omeg,kp,kpX,kpY,hh,self)
 					subplot(2,4,1)
-					C1=contour(x, y, z, arr2(), linewidths=1.8)
+					C1=contour(x, y, z, arrS(), linewidths=1.8, colors='yellow')
 					xlabel("x")
 					ylabel("y")
 					title("Hxy")
@@ -268,7 +279,7 @@ class Graf:
 				else:
 					x, y, z, x1, y1, z1, x2, y2, z2, x3, y3, z3, x4, y4, z4, x5, y5, z5 = Graf.makeTEnm(self.a,self.b,time,omeg,kp,kpX,kpY,hh,self)
 					subplot(2,4,1)
-					C1=contour(x, y, z, linspace(-4,4,20), linewidths=1.8)
+					C1=contour(x, y, z,  linspace(-2,2,40), linewidths=1.8)
 					xlabel("x")
 					ylabel("y")
 					title("Hxy")
@@ -322,7 +333,7 @@ class Graf:
 					title("Hzy")
 					subplot(2,4,3)
 					if abs(cos(omeg*time))>=0.0001:
-						C4=contour(x3, y3, z3, linspace(-1,1,20), linewidths=1.8)
+						C4=contour(x3, y3, z3, linspace(-1,1,40), linewidths=1.8)
 					else:
 						NN=1
 					xlabel("x")
